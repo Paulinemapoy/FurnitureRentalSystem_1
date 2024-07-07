@@ -1,0 +1,188 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+struct Furniture
+{
+    int id;
+    string name;
+    string category;
+    string brand;
+    int stocks;
+    int rented;
+};
+
+vector<Furniture> furnitureList;
+
+void displayMenu()
+{
+    cout << "\nMAIN MENU\n";
+    cout << "[1] - Insert New Furniture\n";
+    cout << "[2] - Rent a Furniture\n";
+    cout << "[3] - Return a Furniture\n";
+    cout << "[4] - Show Furniture Details\n";
+    cout << "[5] - Display All Furniture\n";
+    cout << "[6] - Check Furniture Availability\n";
+    cout << "[7] - Customer Maintenance\n";
+    cout << "[8] - Exit Program\n\n";
+}
+
+void insertNewFurniture()
+{
+    Furniture newFurniture;
+    cout << "Enter furniture ID: ";
+    cin >> newFurniture.id;
+
+    cout << "Enter furniture name: ";
+    cin.ignore();
+    getline(cin, newFurniture.name);
+
+    cout << "Enter furniture category: ";
+    getline(cin, newFurniture.category);
+
+    cout << "Enter furniture brand: ";
+    getline(cin, newFurniture.brand);
+
+    cout << "Enter number of stocks: ";
+    cin >> newFurniture.stocks;
+    newFurniture.rented = 0;
+
+    furnitureList.push_back(newFurniture);
+
+    cout << "Furniture added successfully.\n";
+    cin.ignore();
+    cout << "Press Enter to continue...";
+    cin.get();
+}
+
+void rentFurniture()
+{
+    int furnitureID;
+    char rentAnother;
+
+    do
+    {
+        cout << "Enter furniture ID to rent: ";
+        cin >> furnitureID;
+
+        bool found = false;
+        for (auto &furniture : furnitureList)
+        {
+            if (furniture.id == furnitureID && furniture.stocks > furniture.rented)
+            {
+                furniture.rented++;
+                cout << "Furniture rented successfully.\n";
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            cout << "Furniture not found or not available.\n";
+        }
+
+        cout << "Do you want to rent another furniture? (y/n): ";
+        cin >> rentAnother;
+        cin.ignore();
+    } while (rentAnother == 'y' || rentAnother == 'Y');
+}
+
+void showFurnitureDetails()
+{
+    int furnitureID;
+    cout << "Enter furniture ID to show details: ";
+    cin >> furnitureID;
+
+    bool found = false;
+    for (const auto &furniture : furnitureList)
+    {
+        if (furniture.id == furnitureID)
+        {
+            cout << "Furniture ID: " << furniture.id << endl;
+            cout << "Name: " << furniture.name << endl;
+            cout << "Category: " << furniture.category << endl;
+            cout << "Brand: " << furniture.brand << endl;
+            cout << "Stocks available: " << (furniture.stocks - furniture.rented) << endl;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "Furniture not found.\n";
+    }
+
+    cout << "Press Enter to continue...";
+    cin.ignore();
+    cin.get();
+}
+
+void displayAllFurniture()
+{
+    if (furnitureList.empty())
+    {
+        cout << "No furniture available.\n";
+    }
+    else
+    {
+        cout << "List of all furniture:\n";
+        for (const auto &furniture : furnitureList)
+        {
+            cout << "ID: " << furniture.id << ", Name: " << furniture.name
+                 << ", Category: " << furniture.category << ", Brand: " << furniture.brand
+                 << ", Stocks available: " << (furniture.stocks - furniture.rented) << endl;
+        }
+    }
+
+    cout << "Press Enter to continue...";
+    cin.ignore();
+    cin.get();
+}
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        displayMenu();
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            insertNewFurniture();
+            break;
+        case 2:
+            rentFurniture();
+            break;
+        case 3:
+            cout << "WALA PA\n";
+            break;
+        case 4:
+            showFurnitureDetails();
+            break;
+        case 5:
+            displayAllFurniture();
+            break;
+        case 6:
+            cout << "WALA PA\n";
+            break;
+        case 7:
+            cout << "WALA PA\n";
+            break;
+        case 8:
+            cout << "Exiting Program...\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+
+    } while (choice != 8);
+
+    return 0;
+}
